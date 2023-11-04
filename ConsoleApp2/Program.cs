@@ -2,6 +2,7 @@
 using ConsoleApp2.Entities;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.Hosting;
@@ -17,6 +18,29 @@ namespace ConsoleApp2
 
         {
             //One();
+
+            using (var northwindContext = new NorthWindContext())
+
+            {
+
+                List<Customer> result = (from c in northwindContext.Customers
+
+                                         // SIRALA METODU ÖNCE ÜLKE GELSİN SONRA KİŞİNİN ADI
+                                         orderby c.Country.Length descending, c.ContactName ascending
+
+                                         // ADIN VE ÜLKENİN UZUNLUGUNA GÖRE İŞLEM YAPTIKs
+
+                                         select c).ToList();
+
+                foreach(var customer in result)
+
+                {
+
+                    Console.WriteLine(" {0} , {1} " , customer.Country , customer.ContactName);
+                }
+
+
+            }
 
             using(var northwindContext = new NorthWindContext())
 

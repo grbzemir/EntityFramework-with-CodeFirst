@@ -1,5 +1,6 @@
 ﻿using ConsoleApp2.Context;
 using ConsoleApp2.Entities;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
@@ -20,6 +21,195 @@ namespace ConsoleApp2
             //One();
 
             using (var northwindContext = new NorthWindContext())
+
+            {
+
+                // Eager loading isteyerek orderları yükledik
+
+                var result = northwindContext.Customers.Include("Orders");
+
+                foreach (var customer in result)
+
+                {
+
+                    Console.WriteLine(" {0} , {1} ", customer.ContactName, customer.Orders.Count);
+                }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            }
+
+
+
+
+                using (var northwindContext = new NorthWindContext())
+
+            {
+
+                var result = northwindContext.Customers.Where(c => c.City == "London" && c.Country == "UK").
+
+                    OrderBy(c => c.ContactName).
+
+                    Select(cus => new { cus.CustomerId, cus.ContactName });
+
+                   
+
+                    foreach(var customer in result)
+
+                {
+
+                    Console.WriteLine("{0} , {1} " , customer.CustomerId , customer.ContactName);
+                }
+
+
+
+
+
+
+
+
+
+
+
+
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                using (var northwindContext = new NorthWindContext())
+
+            {
+
+                var result = from c in northwindContext.Customers
+
+                             join o in northwindContext.Orders
+
+                             // equals iki değeri karşılaştırmak için kullanılır
+
+                             on c.CustomerId equals o.CustomerId into temp
+
+                             from co in temp.DefaultIfEmpty()
+
+                             where temp.Count() == 0
+
+                             select new
+
+
+                             {
+
+                                 c.CustomerId,
+                                 c.ContactName,
+                                 c.CompanyName,
+
+                             };
+
+
+                foreach(var customer in result)
+
+                {
+
+                    Console.WriteLine(" {0} , {1} , {2} " , customer.CustomerId , customer.ContactName , customer.CompanyName );
+                
+                }
+
+                Console.WriteLine("{0} adet kayıt vardır" , result.Count());
+
+
+            }
+
+
+
+                using (var northwindContext = new NorthWindContext())
+
+            {
+
+                var result = from c in northwindContext.Customers
+
+                               join o in northwindContext.Orders
+
+                               on 
+                               
+                               new { CustomerId =  c.CustomerId , Sehir = c.City} 
+                               
+                               equals 
+                               
+                               new { o.CustomerId  , Sehir =  o.ShipCity}
+
+
+                               orderby c.CustomerId
+
+
+                               select new
+
+                               {
+
+                                   c.CustomerId, c.ContactName, o.OrderDate, o.ShipCity
+
+
+                               };
+
+                Console.WriteLine("{0} adet sipariş vardır" , result.Count());
+                // count dizinin eleman sayısın bulur!
+
+
+
+                foreach (var item in result)
+
+                {
+
+                    Console.WriteLine(" {0} , {1} , {2} , {3} ",  
+                       
+                        item.CustomerId ,
+                        item.ContactName , 
+                        item.OrderDate , 
+                        item.ShipCity);
+                }
+
+
+            }
+
+
+            Console.ReadLine();
+            
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                using (var northwindContext = new NorthWindContext())
 
             {
 

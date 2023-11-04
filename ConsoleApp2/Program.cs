@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.Hosting;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace ConsoleApp2
@@ -16,6 +17,38 @@ namespace ConsoleApp2
 
         {
             //One();
+
+            using(var northwindContext = new NorthWindContext())
+
+            {
+
+                var result = from c in northwindContext.Customers
+
+                             group c by new { c.Country, c.City }
+                             into g
+
+                             select new
+
+
+                             {
+
+                                    Sehir = g.Key.City,
+                                    Ulke = g.Key.Country,
+                                    Adet = g.Count()
+
+
+                             };
+
+
+
+              foreach(var group in result)
+
+                {
+
+                    Console.WriteLine("Ulke: {0} , Şehir : {1}  , Adet : {2}  " ,  group.Ulke , group.Adet , group.Sehir );
+                }
+
+            }
 
             using (var northwindContext = new NorthWindContext())
 

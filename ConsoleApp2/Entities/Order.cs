@@ -11,6 +11,7 @@ namespace ConsoleApp2.Entities
     {
 
 
+
         public int OrderId { get; set; }
 
         public string CustomerId { get; set; }
